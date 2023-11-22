@@ -10,7 +10,7 @@ import Login from '../Pages/Login';
 
 function NavScrollExample() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary" style={{ minHeight: '80px' }}>
       <Container fluid>
         <Navbar.Brand href="/">Food Zap</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -27,15 +27,7 @@ function NavScrollExample() {
               </Nav.Link>
             </NavDropdown>
           </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form>
+          
         </Navbar.Collapse>
       </Container>
     </Navbar>
