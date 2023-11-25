@@ -2,15 +2,13 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import { NavLink } from 'react-router-dom';
-import Login from '../Pages/Login';
+
 
 function NavScrollExample() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary" style={{ minHeight: '80px' }}>
+    <Navbar expand="lg" className="bg-body-tertiary" style={{ minHeight: '80px', backgroundColor: '#00bc8c' }}>
       <Container fluid>
         <Navbar.Brand href="/">Food Zap</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -27,7 +25,6 @@ function NavScrollExample() {
               </Nav.Link>
             </NavDropdown>
           </Nav>
-          
         </Navbar.Collapse>
       </Container>
     </Navbar>
