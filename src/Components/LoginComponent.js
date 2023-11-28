@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import background from "../utils/login-background.jpg";
+import { Link } from "react-router-dom";
+//import { events } from "../../Backend/Models/User";
 
 const BodyContainer = styled.div`
   background: url(${background}) center center/cover no-repeat;
@@ -33,7 +35,8 @@ const SignInContainer = styled.div`
   left: 0;
   width: 50%;
   z-index: 2;
-  ${props => (props.signingIn !== true ? `transform: translateX(100%);` : null)}
+  ${(props) =>
+    props.signingIn !== true ? `transform: translateX(100%);` : null}
 `;
 
 const SignUpContainer = styled.div`
@@ -45,7 +48,7 @@ const SignUpContainer = styled.div`
   width: 50%;
   opacity: 0;
   z-index: 1;
-  ${props =>
+  ${(props) =>
     props.signingIn !== true
       ? `
       transform: translateX(100%);
@@ -120,7 +123,8 @@ const OverlayContainer = styled.div`
   overflow: hidden;
   transition: transform 0.6s ease-in-out;
   z-index: 100;
-  ${(props) => (props.signingIn !== true ? `transform: translateX(-100%);` : null)}
+  ${(props) =>
+    props.signingIn !== true ? `transform: translateX(-100%);` : null}
 `;
 
 const Overlay = styled.div`
@@ -137,7 +141,8 @@ const Overlay = styled.div`
   width: 200%;
   transform: translateX(0);
   transition: transform 0.6s ease-in-out;
-  ${(props) => (props.signingIn !== true ? `transform: translateX(50%);` : null)}
+  ${(props) =>
+    props.signingIn !== true ? `transform: translateX(50%);` : null}
 `;
 
 const OverlayPanel = styled.div`
@@ -163,7 +168,8 @@ const LeftOverlayPanel = styled(OverlayPanel)`
 const RightOverlayPanel = styled(OverlayPanel)`
   right: 0;
   transform: translateX(0);
-  ${(props) => (props.signingIn !== true ? `transform: translateX(20%);` : null)}
+  ${(props) =>
+    props.signingIn !== true ? `transform: translateX(20%);` : null}
 `;
 
 const Paragraph = styled.p`
@@ -177,6 +183,75 @@ const Paragraph = styled.p`
 // Main Login Component
 function LoginComponent() {
   const [signIn, toggle] = useState(true);
+  const [credentials, setcredentials] = useState({
+    name: "",
+    email: "",
+    password: "",
+    geolocation: "",
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:5000/api/createuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: credentials.name,
+        email: credentials.email,
+        password: credentials.password,
+        location: credentials.location,
+      }),
+    });
+
+    const json = await response.json();
+    console.log(json);
+    if (!json.success) {
+      alert("Enter valid credentials");
+    }
+  };
+  const [logincredentials, setlogincredentials] = useState({
+    email: "",
+    password: "",
+  });
+  const handleSubmitLogin = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:5000/api/loginuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: logincredentials.email,
+        password: logincredentials.password,
+      }),
+    });
+
+    const json = await response.json();
+    console.log(json);
+    if (!json.success) {
+      alert("Enter valid credentials");
+    }
+  };
+  const onchangelogin = (event) => {
+    setlogincredentials((prevCredentials) => {
+      const updatedCredentials = {
+        ...prevCredentials,
+        [event.target.name]: event.target.value,
+      };
+      return updatedCredentials;
+    });
+  };
+
+  const onchange = (event) => {
+    setcredentials((prevCredentials) => {
+      const updatedCredentials = {
+        ...prevCredentials,
+        [event.target.name]: event.target.value,
+      };
+      return updatedCredentials;
+    });
+  };
 
   return (
     <BodyContainer>
@@ -200,22 +275,62 @@ function LoginComponent() {
           </Overlay>
         </OverlayContainer>
         <SignUpContainer signingIn={signIn}>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Title>Create Account</Title>
-            <Input type="text" placeholder="Name" />
-            <Input type="email" placeholder="Email" />
-            <Input type="password" placeholder="Password" />
-            <Input type="text" placeholder="Location"/>
-            <Button>Sign Up</Button>
+            <Input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={credentials.name}
+              onChange={onchange}
+            />
+            <Input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={credentials.email}
+              onChange={onchange}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={credentials.password}
+              onChange={onchange}
+            />
+            <Input
+              type="text"
+              placeholder="Location"
+              name="location"
+              value={credentials.location}
+              onChange={onchange}
+            />
+            <Button type="submit" className="btn">
+              Sign Up
+            </Button>
           </Form>
         </SignUpContainer>
         <SignInContainer signingIn={signIn}>
-          <Form>
+          <Form onSubmit={handleSubmitLogin}>
             <Title>Sign in</Title>
-            <Input type="email" placeholder="Email" />
-            <Input type="password" placeholder="Password" />
+            <Input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={logincredentials.email}
+              onChange={onchangelogin}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={logincredentials.password}
+              onChange={onchangelogin}
+            />
             <Anchor href="#">Forgot your password?</Anchor>
-            <Button>Sign In</Button>
+            <Button type="submit" className="btn">
+              Sign In
+            </Button>
           </Form>
         </SignInContainer>
       </Container>
