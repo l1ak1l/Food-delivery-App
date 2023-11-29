@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import background from "../utils/login-background.jpg";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 //import { events } from "../../Backend/Models/User";
 
 const BodyContainer = styled.div`
@@ -214,6 +214,7 @@ function LoginComponent() {
     email: "",
     password: "",
   });
+  let navigate = useNavigate()
   const handleSubmitLogin = async (e) => {
     e.preventDefault();
     const response = await fetch("http://localhost:5000/api/loginuser", {
@@ -231,6 +232,10 @@ function LoginComponent() {
     console.log(json);
     if (!json.success) {
       alert("Enter valid credentials");
+    }
+    if(json.success){
+      navigate("/");
+      localStorage.setItem("authToken",json.authToken)
     }
   };
   const onchangelogin = (event) => {
